@@ -174,16 +174,16 @@ function createPuzzle(solution) {
     let cluesToKeep;
     switch (currentDifficulty) {
         case 'easy':
-            cluesToKeep = 42; 
+            cluesToKeep = 18; 
             break;
         case 'medium':
-            cluesToKeep = 32; 
+            cluesToKeep = 14; 
             break;
         case 'hard':
-            cluesToKeep = 24; 
+            cluesToKeep = 10; 
             break;
         default:
-            cluesToKeep = 32; // Default to medium
+            cluesToKeep = 14; // Default to medium
     }
 
     let cellsRevealed = 81;
@@ -204,3 +204,4 @@ function createPuzzle(solution) {
 
 // Start the game when the script loads
 initGame();
+
