@@ -1,12 +1,12 @@
 const CACHE_NAME = 'sudoku-cache-v1';
 // List all your game files here
 const urlsToCache = [
-  '/YOUR_REPOSITORY_NAME/',
-  '/YOUR_REPOSITORY_NAME/index.html',
-  '/YOUR_REPOSITORY_NAME/script.js',
-  '/YOUR_REPOSITORY_NAME/style.css', // Assuming you have a style.css
-  '/YOUR_REPOSITORY_NAME/icon-192x192.png',
-  '/YOUR_REPOSITORY_NAME/icon-512x512.png'
+  'https://neilwhart.github.io/OfflineSudoku',
+  'https://neilwhart.github.io/OfflineSudoku/index.html',
+  'https://neilwhart.github.io/OfflineSudoku/script.js',
+  'https://neilwhart.github.io/OfflineSudoku/style.css', // Assuming you have a style.css
+  'https://neilwhart.github.io/OfflineSudoku/icon-192x192.png',
+  'https://neilwhart.github.io/OfflineSudoku/icon-512x512.png'
 ];
 
 // Replace /YOUR_REPOSITORY_NAME/ with your actual repo name here too
