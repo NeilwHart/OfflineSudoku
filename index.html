@@ -11,22 +11,22 @@
         // Register the service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/YOUR_REPOSITORY_NAME/service-worker.js')
+                navigator.serviceWorker.register('https://neilwhart.github.io/OfflineSudoku/service-worker.js')
                     .then(registration => console.log('Service Worker Registered'))
                     .catch(err => console.log('SW Registration Failed:', err));
             });
         }
     </script>
 </head>
-<body class="d-flex justify-content-center align-items-center">
-    <div id="game-container" class="text-center" style="border: 1px solid black;">
-        <h1>Neil's Offline Sudoku</h1>
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div id="game-container" class="text-center" style="border: 2px solid blue; border-radius: 8px;">
+        <h1 style="color: blue;">Neil's Offline Sudoku</h1>
         <div id="timer">Time: 00:00 | Best: <span id="best-time">--:--</span></div>
-        <div id="grid"></div>
+        <div id="grid" class="p-2"></div>
         <div id="keypad">
             <!-- Buttons 1-9 for input -->
         </div>
-        <div>
+        <div class="pb-2">
             <label for="difficulty">Choose Difficulty:</label>
             <select name="difficulty" id="difficulty-select" onchange="setDifficulty(this.value)">
                 <option value="easy">Easy (40+ clues)</option>
@@ -39,4 +39,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
