@@ -4,7 +4,6 @@ body {
     font-family: sans-serif; 
     text-align: center; 
     margin: 0; 
-    padding: 10px;
     box-sizing: border-box; 
     display: flex;
     flex-direction: column;
@@ -13,13 +12,12 @@ body {
 }
 #game-container {
     width: 100%;
-    max-width: 480px; 
+    max-width: 460px; 
 }
 #grid { 
     display: grid; 
     grid-template-columns: repeat(9, 1fr); 
     width: 100%; 
-    border: 2px solid black; 
     box-sizing: border-box; 
 }
 .cell { 
@@ -46,4 +44,5 @@ input {
     /* Ensure input also uses the large font size */
     font-size: 2rem;
 }
+
 
