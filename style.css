@@ -17,7 +17,7 @@ body {
     aspect-ratio: 1; 
     border: 1px solid #ccc; 
     /* Make font size much larger */
-    font-size: 2rem; 
+    font-size: 1.5rem; 
     /* Use flexbox for perfect centering (removes 'padding' effect) */
     display: flex;
     justify-content: center;
@@ -35,3 +35,4 @@ input {
     /* Ensure input also uses the large font size */
     font-size: 2rem;
 }
+
