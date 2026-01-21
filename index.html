@@ -6,7 +6,17 @@
     <title>Offline Sudoku</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  </head>
+      <link rel="manifest" href="manifest.json">
+    <script>
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/YOUR_REPOSITORY_NAME/service-worker.js')
+                    .then(registration => console.log('Service Worker Registered'))
+                    .catch(err => console.log('SW Registration Failed:', err));
+            });
+        }
+    </script>
 </head>
 <body class="d-flex justify-content-center align-items-center">
     <div id="game-container" class="text-center" style="border: 1px solid black;">
@@ -29,3 +39,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
+
