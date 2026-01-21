@@ -7,8 +7,7 @@ body {
     box-sizing: border-box; 
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    min-height: 100vh; 
+    align-items: center;
 }
 #game-container {
     width: 100%;
@@ -44,6 +43,7 @@ input {
     /* Ensure input also uses the large font size */
     font-size: 2rem;
 }
+
 
 
 
