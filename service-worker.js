@@ -10,7 +10,7 @@ const urlsToCache = [
 ];
 
 // Replace /YOUR_REPOSITORY_NAME/ with your actual repo name here too
-const GHPATH = '/YOUR_REPOSITORY_NAME';
+const GHPATH = 'https://neilwhart.github.io/OfflineSudoku';
 
 self.addEventListener('install', event => {
   event.waitUntil(
