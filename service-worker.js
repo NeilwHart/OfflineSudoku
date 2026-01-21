@@ -4,13 +4,21 @@ const urlsToCache = [
   'https://neilwhart.github.io/OfflineSudoku',
   'https://neilwhart.github.io/OfflineSudoku/index.html',
   'https://neilwhart.github.io/OfflineSudoku/script.js',
-  'https://neilwhart.github.io/OfflineSudoku/style.css', // Assuming you have a style.css
+  'https://neilwhart.github.io/OfflineSudoku/service-worker.js',
+  'https://neilwhart.github.io/OfflineSudoku/style.css', 
   'https://neilwhart.github.io/OfflineSudoku/icon-192x192.png',
   'https://neilwhart.github.io/OfflineSudoku/icon-512x512.png'
 ];
 
 // Replace /YOUR_REPOSITORY_NAME/ with your actual repo name here too
-const GHPATH = 'https://neilwhart.github.io/OfflineSudoku';
+const GHPATH = 
+  'https://neilwhart.github.io/OfflineSudoku',
+  'https://neilwhart.github.io/OfflineSudoku/index.html',
+  'https://neilwhart.github.io/OfflineSudoku/script.js',
+  'https://neilwhart.github.io/OfflineSudoku/service-worker.js',
+  'https://neilwhart.github.io/OfflineSudoku/style.css', 
+  'https://neilwhart.github.io/OfflineSudoku/icon-192x192.png',
+  'https://neilwhart.github.io/OfflineSudoku/icon-512x512.png';
 
 self.addEventListener('install', event => {
   event.waitUntil(
