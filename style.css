@@ -14,7 +14,6 @@ body {
 }
 .cell { 
     width: 100%; 
-    aspect-ratio: 1; 
     border: 1px solid #ccc; 
     /* Make font size much larger */
     font-size: 1.5rem; 
@@ -35,6 +34,7 @@ input {
     /* Ensure input also uses the large font size */
     font-size: 1.5rem;
 }
+
 
 
 
