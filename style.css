@@ -13,7 +13,7 @@ body {
 }
 #game-container {
     width: 100%;
-    max-width: 500px; 
+    max-width: 480px; 
 }
 #grid { 
     display: grid; 
@@ -46,3 +46,4 @@ input {
     /* Ensure input also uses the large font size */
     font-size: 2rem;
 }
+
