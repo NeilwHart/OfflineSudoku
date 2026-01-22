@@ -1,47 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Sudoku</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline Sudoku</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <!-- iOS meta tags for "Add to Home Screen" -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Offline Sudoku" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <!-- Optional: theme color -->
+  <meta name="theme-color" content="#0d6efd" />
+
+  <script>
+    // Service Worker registration (relative path) so it works both locally and on GitHub Pages.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Use relative path so the service worker file must be in the same folder as index.html
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('Service Worker registered', reg))
+          .catch(err => console.log('SW Registration Failed:', err));
+      });
+    }
+
+    // Handle beforeinstallprompt to show a custom Install button
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent Chrome 67+ from automatically showing the prompt
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('install-btn');
+      if (btn) {
+        btn.style.display = 'inline-block';
+        btn.addEventListener('click', async () => {
+          btn.style.display = 'none';
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log('User choice', outcome);
+          deferredPrompt = null;
+        });
+      }
+    });
+  </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-      <link rel="manifest" href="manifest.json">
-    <script>
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('https://neilwhart.github.io/OfflineSudoku/service-worker.js')
-                    .then(registration => console.log('Service Worker Registered'))
-                    .catch(err => console.log('SW Registration Failed:', err));
-            });
-        }
-    </script>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
-    <div id="game-container" class="text-center" style="border: 2px solid blue; border-radius: 8px;">
-        <h1 style="color: blue;">Neil's Offline Sudoku</h1>
-        <div id="timer">Time: 00:00 | Best: <span id="best-time">--:--</span></div>
-        <div id="grid" class="p-2"></div>
-        <div id="keypad">
-            <!-- Buttons 1-9 for input -->
-        </div>
-        <div class="pb-2">
-            <label for="difficulty">Choose Difficulty:</label>
-            <select name="difficulty" id="difficulty-select" onchange="setDifficulty(this.value)">
-                <option value="easy">Easy</option>
-                <option value="medium" selected>Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-        </div>
+  <div id="game-container" class="text-center" style="border: 2px solid blue; border-radius: 8px; padding: 16px;">
+    <h1 style="color: blue;">Neil's Offline Sudoku</h1>
+
+    <button id="install-btn" style="display:none; margin-bottom: 8px;">Install App</button>
+
+    <div id="timer">Time: 00:00 | Best: <span id="best-time">--:--</span></div>
+    <div id="grid" class="p-2"></div>
+    <div id="keypad">
+      <!-- Buttons 1-9 -->
     </div>
-    <script src="script.js"></script>
+    <div class="pb-2">
+      <label for="difficulty">Choose Difficulty:</label>
+      <select name="difficulty" id="difficulty-select" onchange="setDifficulty(this.value)">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+  </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
