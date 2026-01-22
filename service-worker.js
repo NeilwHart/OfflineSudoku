@@ -20,7 +20,7 @@ self.addEventListener('install', event => {
       .then(cache => {
         console.log('Opened cache');
         // Add all necessary files to the cache
-        return cache.addAll(urlsToCache.map(url => new URL(url, location.href).pathname));
+        return cache.addAll(urlsToCache); // <-- This is where that line goes
       })
   );
 });
