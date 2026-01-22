@@ -1,24 +1,18 @@
 const CACHE_NAME = 'sudoku-cache-v1';
-// List all your game files here
+
+// Using relative paths is safer for GitHub Pages
 const urlsToCache = [
-  'https://neilwhart.github.io/OfflineSudoku',
-  'https://neilwhart.github.io/OfflineSudoku/index.html',
-  'https://neilwhart.github.io/OfflineSudoku/script.js',
-  'https://neilwhart.github.io/OfflineSudoku/service-worker.js',
-  'https://neilwhart.github.io/OfflineSudoku/style.css', 
-  'https://neilwhart.github.io/OfflineSudoku/icon-192x192.png',
-  'https://neilwhart.github.io/OfflineSudoku/icon-512x512.png'
+  './',
+  './index.html',
+  './script.js',
+  './style.css',
+  './icon-192x192.png',
+  './icon-512x512.png',
+  './manifest.json' // Make sure to include your manifest if you have one!
 ];
 
-// Replace /YOUR_REPOSITORY_NAME/ with your actual repo name here too
-const GHPATH = 
-  'https://neilwhart.github.io/OfflineSudoku',
-  'https://neilwhart.github.io/OfflineSudoku/index.html',
-  'https://neilwhart.github.io/OfflineSudoku/script.js',
-  'https://neilwhart.github.io/OfflineSudoku/service-worker.js',
-  'https://neilwhart.github.io/OfflineSudoku/style.css', 
-  'https://neilwhart.github.io/OfflineSudoku/icon-192x192.png',
-  'https://neilwhart.github.io/OfflineSudoku/icon-512x512.png';
+// If you need a base path variable for other logic:
+const GHPATH = '/OfflineSudoku'; 
 
 self.addEventListener('install', event => {
   event.waitUntil(
