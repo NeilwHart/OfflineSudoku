@@ -1,10 +1,10 @@
 {
   "name": "Neil's Offline Sudoku",
   "short_name": "Sudoku",
-  "description": "A completely offline Sudoku game.",
-  "start_url": "https://neilwhart.github.io/OfflineSudoku/", 
+  "description": "An offline-first Sudoku game hosted on GitHub Pages.",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#f0f0f0",
+  "theme_color": "#333333",
   "icons":
 }
