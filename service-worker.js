@@ -5,8 +5,8 @@ const ASSETS_TO_CACHE = [
   './style.css',
   './script.js',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', (event) => {
