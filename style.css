@@ -100,3 +100,40 @@ input {
     color: #121df1;
     margin: 0;
 }
+
+/* 1. The Success Glow Animation */
+@keyframes glow-pulse {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(0, 255, 127, 0.4); box-shadow: inset 0 0 15px #00ff7f; }
+    100% { background-color: transparent; }
+}
+
+.glow-success {
+    animation: glow-pulse 1s ease-in-out;
+}
+
+/* 2. The Win Message with Ease Effect */
+.win-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.4);
+    text-align: center;
+    z-index: 2000;
+    opacity: 0;
+    /* This creates the smooth 'ease' pop-up effect */
+    animation: banner-appear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes banner-appear {
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.win-banner h2 { color: #121df1; margin-top: 0; }
