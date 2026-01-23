@@ -1,35 +1,30 @@
-// script.js - Offline Sudoku for Samsung A05s (Dynamic Difficulty)
+// Load Confetti Library correctly
+const confettiScript = document.createElement('script');
+confettiScript.src = 'https://cdn.jsdelivr.net';
+document.head.appendChild(confettiScript);
 
 let timer;
 let secondsElapsed = 0;
 const gridElement = document.getElementById('grid');
 const bestTimeSpan = document.getElementById('best-time');
-// Initialize with a default difficulty
 let currentDifficulty = 'medium'; 
 
-// 1. Initial Puzzle and Solution variables (will be populated dynamically)
 let puzzle = [];
 let solution = [];
+let selectedCell = null;
 
-// Helper function to handle difficulty change from HTML
 function setDifficulty(difficulty) {
     currentDifficulty = difficulty;
     resetGame(); 
 }
 
-// Function to start a fresh game
 function resetGame() {
-    clearInterval(timer); // Stop the current timer
-    secondsElapsed = 0;   // Reset time
-    if (gridElement) {
-        gridElement.innerHTML = ''; // Clear the grid visually
-    }
-    initGame(); // Start a new game with the current difficulty
+    clearInterval(timer);
+    secondsElapsed = 0;
+    if (gridElement) gridElement.innerHTML = '';
+    initGame();
 }
 
-let selectedCell = null; // Tracks the currently active box
-
-// Initialize Game
 function initGame() {
     solution = generateSolution();
     puzzle = createPuzzle(solution); 
@@ -42,22 +37,21 @@ function initGame() {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             
-            // Border logic (retained)
+            // Border logic
             if ((c + 1) % 3 === 0 && c < 8) cell.style.borderRight = "3px solid #121df1";
             if ((r + 1) % 3 === 0 && r < 8) cell.style.borderBottom = "3px solid #121df1";
+
+            cell.dataset.row = r;
+            cell.dataset.col = c;
 
             if (puzzle[r][c] !== 0) {
                 cell.innerText = puzzle[r][c];
                 cell.classList.add('fixed');
             } else {
-                // Click to select the cell
                 cell.onclick = () => {
                     if (selectedCell) selectedCell.classList.remove('selected');
                     selectedCell = cell;
                     selectedCell.classList.add('selected');
-                    // Store row/col data for validation
-                    selectedCell.dataset.row = r;
-                    selectedCell.dataset.col = c;
                 };
             }
             gridElement.appendChild(cell);
@@ -66,51 +60,111 @@ function initGame() {
     startTimer();
 }
 
-// Function triggered by the number pad buttons
 function inputNumber(num) {
     if (!selectedCell) return;
 
-    const r = selectedCell.dataset.row;
-    const c = selectedCell.dataset.col;
+    const r = parseInt(selectedCell.dataset.row);
+    const c = parseInt(selectedCell.dataset.col);
 
     selectedCell.innerText = num;
 
-    // Mistake Highlighting
     if (num !== solution[r][c]) {
         selectedCell.classList.add('error');
     } else {
         selectedCell.classList.remove('error');
-        checkWin();
+        checkLineCompletion(r, c); // Glow check
+        checkWin(); // Win check
     }
 }
 
-function clearCell() {
-    if (selectedCell) {
-        selectedCell.innerText = "";
-        selectedCell.classList.remove('error');
+// GLOW ANIMATION LOGIC
+function checkLineCompletion(row, col) {
+    const cells = document.querySelectorAll('.cell');
+    const getCell = (r, c) => cells[r * 9 + c];
+
+    // Check Row
+    let rowComplete = true;
+    for (let i = 0; i < 9; i++) {
+        if (getCell(row, i).innerText == "" || getCell(row, i).classList.contains('error')) rowComplete = false;
+    }
+    if (rowComplete) {
+        for (let i = 0; i < 9; i++) animateGlow(getCell(row, i));
+    }
+
+    // Check Column
+    let colComplete = true;
+    for (let i = 0; i < 9; i++) {
+        if (getCell(i, col).innerText == "" || getCell(i, col).classList.contains('error')) colComplete = false;
+    }
+    if (colComplete) {
+        for (let i = 0; i < 9; i++) animateGlow(getCell(i, col));
+    }
+
+    // Check Box
+    let boxComplete = true;
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            if (getCell(startRow + r, startCol + c).innerText == "" || getCell(startRow + r, startCol + c).classList.contains('error')) boxComplete = false;
+        }
+    }
+    if (boxComplete) {
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) animateGlow(getCell(startRow + r, startCol + c));
+        }
     }
 }
 
-// Updated checkWin for non-input elements
+function animateGlow(el) {
+    el.classList.add('glow-success');
+    setTimeout(() => el.classList.remove('glow-success'), 1000);
+}
+
+// WIN AND AUTO-RESTART LOGIC
 function checkWin() {
     const cells = document.querySelectorAll('.cell');
     const allCorrect = Array.from(cells).every(cell => {
         const val = parseInt(cell.innerText);
-        return val > 0 && !cell.classList.contains('error');
+        const r = cell.dataset.row;
+        const c = cell.dataset.col;
+        return val === solution[r][c];
     });
     
     if (allCorrect) {
         clearInterval(timer);
-        alert(`You Won!`);
+        handleWin();
     }
 }
 
+function handleWin() {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
-// 3. Timer Logic
+    const timeTaken = formatTime(secondsElapsed);
+    const msg = document.createElement('div');
+    msg.className = 'win-banner';
+    msg.innerHTML = `<h2>Excellent!</h2><p>You solved it in ${timeTaken}</p>`;
+    document.body.appendChild(msg);
+
+    const currentBest = localStorage.getItem('sudokuBestTime');
+    if (!currentBest || secondsElapsed < currentBest) {
+        localStorage.setItem('sudokuBestTime', secondsElapsed);
+        bestTimeSpan.innerText = timeTaken;
+    }
+
+    // New Game start after 4 seconds
+    setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => {
+            msg.remove();
+            resetGame(); 
+        }, 500);
+    }, 4000);
+}
+
 function startTimer() {
     const timerElement = document.getElementById('timer');
     if (!timerElement) return;
-
     timer = setInterval(() => {
         secondsElapsed++;
         timerElement.innerText = `Time: ${formatTime(secondsElapsed)}`;
@@ -123,26 +177,7 @@ function formatTime(sec) {
     return `${m}:${s}`;
 }
 
-// 4. Save Best Time Offline and Win Condition
-function checkWin() {
-    const inputs = document.querySelectorAll('input');
-    const allCorrect = Array.from(inputs).every(i => i.value && parseInt(i.value) > 0 && !i.classList.contains('error'));
-    
-    if (allCorrect && inputs.length > 0) {
-        clearInterval(timer);
-        alert(`You Won in ${formatTime(secondsElapsed)}!`);
-        
-        const currentBest = localStorage.getItem('sudokuBestTime');
-        if (!currentBest || secondsElapsed < currentBest) {
-            localStorage.setItem('sudokuBestTime', secondsElapsed);
-            bestTimeSpan.innerText = formatTime(secondsElapsed);
-            alert("New Record!");
-        }
-    }
-}
-
-// --- Sudoku Generation Logic ---
-
+// GENERATION LOGIC
 function generateSolution() {
     const board = Array(9).fill(0).map(() => Array(9).fill(0));
     solve(board);
@@ -186,7 +221,7 @@ function createPuzzle(solution) {
     const puzzle = solution.map(row => [...row]);
     let cluesToKeep;
     switch (currentDifficulty) {
-        case 'easy': cluesToKeep = 35; break; // Adjusted for better playability
+        case 'easy': cluesToKeep = 35; break;
         case 'medium': cluesToKeep = 28; break; 
         case 'hard': cluesToKeep = 22; break;
         default: cluesToKeep = 28;
