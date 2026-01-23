@@ -48,16 +48,25 @@
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
   <div id="game-container" class="text-center" style="border: 2px solid blue; border-radius: 8px; padding: 16px;">
-    <h1 style="color: blue;">Neil's Offline Sudoku</h1>
+    <h3 style="color: blue;">Neil's Offline Sudoku</h3>
 
     <button id="install-btn" style="display:none; margin-bottom: 8px;">Install App</button>
 
     <div id="timer">Time: 00:00 | Best: <span id="best-time">--:--</span></div>
     <div id="grid" class="p-2"></div>
-    <div id="keypad">
-      <!-- Buttons 1-9 -->
-    </div>
-    <div class="pb-2">
+        <div id="number-pad">
+            <button onclick="inputNumber(1)">1</button>
+            <button onclick="inputNumber(2)">2</button>
+            <button onclick="inputNumber(3)">3</button>
+            <button onclick="inputNumber(4)">4</button>
+            <button onclick="inputNumber(5)">5</button>
+            <button onclick="inputNumber(6)">6</button>
+            <button onclick="inputNumber(7)">7</button>
+            <button onclick="inputNumber(8)">8</button>
+            <button onclick="inputNumber(9)">9</button>
+            <button onclick="clearCell()" class="clear-btn">X</button>
+        </div> 
+    <div class="p-3">
       <label for="difficulty">Choose Difficulty:</label>
       <select name="difficulty" id="difficulty-select" onchange="setDifficulty(this.value)">
         <option value="easy">Easy</option>
@@ -70,4 +79,5 @@
   <script src="script.js"></script>
 </body>
 </html>
+
 
