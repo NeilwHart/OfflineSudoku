@@ -5,7 +5,7 @@ body {
 }
 #game-container {
     width: 100%;
-    max-width: 320px; 
+    max-width: 300px; 
 }
 #grid { 
     display: grid; 
@@ -35,9 +35,29 @@ input {
     font-size: 1.5rem;
 }
 
+#number-pad {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
 
+#number-pad button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #e0e0e0;
+    border: 1px solid #999;
+}
 
+.cell.selected {
+    background-color: #bbdefb !important; /* Light blue highlight */
+}
 
-
-
-
+.cell.error {
+    color: #d32f2f;
+    font-weight: bold;
+}
