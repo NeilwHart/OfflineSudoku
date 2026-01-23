@@ -78,6 +78,19 @@ function inputNumber(num) {
     }
 }
 
+// CLEARCELL HERE (Logic for removing a number)
+function clearCell() {
+    // Check if a cell is selected and NOT a "fixed" starting number
+    if (selectedCell && !selectedCell.classList.contains('fixed')) {
+        selectedCell.innerText = "";
+        selectedCell.classList.remove('error'); // Clear the red error color if it was there
+        
+        // After clearing, we check if the board is technically complete
+        // (This helps if they cleared an error and solved the board)
+        checkWin(); 
+    }
+}
+
 // GLOW ANIMATION LOGIC
 function checkLineCompletion(row, col) {
     const cells = document.querySelectorAll('.cell');
@@ -241,3 +254,4 @@ function createPuzzle(solution) {
 }
 
 initGame();
+
