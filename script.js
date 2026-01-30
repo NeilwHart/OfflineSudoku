@@ -105,6 +105,10 @@ function resetGame() {
     
     const overlay = document.getElementById('grid-overlay');
     if (overlay) overlay.classList.remove('active');
+
+    // CRITICAL FIX: Ensure any existing Game Over banner is removed when starting a new game
+    const gameOverBanner = document.querySelector('.game-over-banner');
+    if (gameOverBanner) gameOverBanner.remove(); 
     
     if (gridElement) gridElement.innerHTML = '';
     initGame();
@@ -216,7 +220,8 @@ function updateStatsUI() {
     const hBtn = document.getElementById('hint-btn');
 
     if (mDisplay) mDisplay.innerText = `Mistakes: ${mistakes}/${maxMistakes}`;
-    if (hDisplay) hDisplay.innerText = `Hints: ${hintsRemaining}/3`;
+    // Updated to count 'Hints Used' from 0/3 upwards
+    if (hDisplay) hDisplay.innerText = `Hints Used: ${3 - hintsRemaining}/3`;
     if (hBtn) hBtn.disabled = hintsRemaining <= 0;
 }
 
@@ -316,7 +321,8 @@ function handleGameOver() {
     clearInterval(timer);
     const msg = document.createElement('div');
     msg.className = 'game-over-banner';
-    msg.innerHTML = `<h2>Game Over</h2><p>Too many mistakes!</p><button onclick="resetGame()">Try Again</button>`;
+    // Added 'control-button' class for consistent styling
+    msg.innerHTML = `<h2>Game Over</h2><p>Too many mistakes!</p><button class="control-button" onclick="resetGame()">Try Again</button>`;
     document.body.appendChild(msg);
 }
 
@@ -334,3 +340,4 @@ document.addEventListener('keydown', (e) => {
 
 // Start the game when the script loads
 initGame();
+
