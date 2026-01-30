@@ -1,6 +1,7 @@
 /** 
  * Sudoku Pro Engine - Latest Version 2026
  * Features: Pause System, 3 Mistakes Game Over, 3 Hint Limit
+ * FIX: All functions declared before they are called.
  */
 
 // Load the Confetti Library (Latest Stable 1.9.4)
@@ -8,7 +9,70 @@ const confettiScript = document.createElement('script');
 confettiScript.src = 'https://cdn.jsdelivr.net';
 document.head.appendChild(confettiScript);
 
-// Game State Variables
+// 1. GAME LOGIC FUNCTIONS (Declared first to avoid ReferenceError)
+
+function generateSolution() {
+    const board = Array(9).fill(0).map(() => Array(9).fill(0));
+    solve(board);
+    return board;
+}
+
+function solve(board) {
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (board[r][c] === 0) {
+                const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.random() - 0.5);
+                for (const num of numbers) {
+                    if (isValid(board, num, r, c)) {
+                        board[r][c] = num;
+                        if (solve(board)) return true;
+                        board[r][c] = 0; 
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function isValid(board, num, row, col) {
+    for (let i = 0; i < 9; i++) {
+        if (board[row][i] === num || board[i][col] === num) return false;
+    }
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            if (board[startRow + r][startCol + c] === num) return false;
+        }
+    }
+    return true;
+}
+
+function createPuzzle(solution) {
+    const puzzle = solution.map(row => [...row]);
+    let cluesToKeep;
+    switch (currentDifficulty) {
+        case 'easy': cluesToKeep = 35; break;
+        case 'medium': cluesToKeep = 28; break; 
+        case 'hard': cluesToKeep = 22; break;
+        default: cluesToKeep = 35;
+    }
+    let cellsRevealed = 81;
+    while (cellsRevealed > cluesToKeep) {
+        const r = Math.floor(Math.random() * 9);
+        const c = Math.floor(Math.random() * 9);
+        if (puzzle[r][c] !== 0) {
+            puzzle[r][c] = 0;
+            cellsRevealed--;
+        }
+    }
+    return puzzle;
+}
+
+// 2. GAME STATE VARIABLES
+
 let timer;
 let secondsElapsed = 0;
 let hintsRemaining = 3;
@@ -24,44 +88,12 @@ let selectedCell = null;
 const gridElement = document.getElementById('grid');
 const bestTimeSpan = document.getElementById('best-time');
 
-// 1. INITIALIZATION & CONTROLS
-function initGame() {
-    solution = generateSolution();
-    puzzle = createPuzzle(solution); 
-    
-    // Load local storage for Best Time
-    const storedBest = localStorage.getItem('sudokuBestTime');
-    if (storedBest) bestTimeSpan.innerText = formatTime(storedBest);
 
-    updateStatsUI(); // Initialize display
+// 3. UI AND EVENT HANDLERS
 
-    for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            
-            // Grid Visuals
-            if ((c + 1) % 3 === 0 && c < 8) cell.style.borderRight = "3px solid #121df1";
-            if ((r + 1) % 3 === 0 && r < 8) cell.style.borderBottom = "3px solid #121df1";
-
-            cell.dataset.row = r;
-            cell.dataset.col = c;
-
-            if (puzzle[r][c] !== 0) {
-                cell.innerText = puzzle[r][c];
-                cell.classList.add('fixed');
-            } else {
-                cell.onclick = () => {
-                    if (isPaused) return; // Anti-cheat
-                    if (selectedCell) selectedCell.classList.remove('selected');
-                    selectedCell = cell;
-                    selectedCell.classList.add('selected');
-                };
-            }
-            gridElement.appendChild(cell);
-        }
-    }
-    startTimer();
+function setDifficulty(difficulty) {
+    currentDifficulty = difficulty;
+    resetGame(); 
 }
 
 function resetGame() {
@@ -78,12 +110,41 @@ function resetGame() {
     initGame();
 }
 
-function setDifficulty(difficulty) {
-    currentDifficulty = difficulty;
-    resetGame(); 
+function initGame() {
+    // These functions are now defined above, so the error is gone
+    solution = generateSolution(); 
+    puzzle = createPuzzle(solution); 
+    
+    const storedBest = localStorage.getItem('sudokuBestTime');
+    if (storedBest) bestTimeSpan.innerText = formatTime(storedBest);
+
+    updateStatsUI();
+
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            if ((c + 1) % 3 === 0 && c < 8) cell.style.borderRight = "3px solid #121df1";
+            if ((r + 1) % 3 === 0 && r < 8) cell.style.borderBottom = "3px solid #121df1";
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            if (puzzle[r][c] !== 0) {
+                cell.innerText = puzzle[r][c];
+                cell.classList.add('fixed');
+            } else {
+                cell.onclick = () => {
+                    if (isPaused) return;
+                    if (selectedCell) selectedCell.classList.remove('selected');
+                    selectedCell = cell;
+                    selectedCell.classList.add('selected');
+                };
+            }
+            gridElement.appendChild(cell);
+        }
+    }
+    startTimer();
 }
 
-// 2. CORE GAMEPLAY LOGIC
 function inputNumber(num) {
     if (!selectedCell || isPaused) return;
 
@@ -130,7 +191,6 @@ function getHint() {
     checkWin();
 }
 
-// 3. SYSTEMS: PAUSE, WIN, LOSS
 function togglePause() {
     isPaused = !isPaused;
     const pauseBtn = document.getElementById('pause-btn');
@@ -147,28 +207,9 @@ function togglePause() {
     }
 }
 
-function handleGameOver() {
-    clearInterval(timer);
-    const msg = document.createElement('div');
-    msg.className = 'game-over-banner';
-    msg.innerHTML = `<h2>Game Over</h2><p>3 Mistakes reached.</p><button onclick="resetGame()">Try Again</button>`;
-    document.body.appendChild(msg);
-}
 
-function handleWin() {
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    const timeTaken = formatTime(secondsElapsed);
-    
-    const currentBest = localStorage.getItem('sudokuBestTime');
-    if (!currentBest || secondsElapsed < currentBest) {
-        localStorage.setItem('sudokuBestTime', secondsElapsed);
-        bestTimeSpan.innerText = timeTaken;
-    }
+// 4. SYSTEMS & UTILITIES
 
-    setTimeout(() => resetGame(), 4000);
-}
-
-// 4. UTILITIES
 function updateStatsUI() {
     const mDisplay = document.getElementById('mistakes-count');
     const hDisplay = document.getElementById('hints-count');
@@ -193,14 +234,103 @@ function formatTime(sec) {
     return `${m}:${s}`;
 }
 
-// Keyboard Support
+function checkLineCompletion(row, col) {
+    const cells = document.querySelectorAll('.cell');
+    const getCell = (r, c) => cells[r * 9 + c];
+
+    let rowComplete = true;
+    for (let i = 0; i < 9; i++) {
+        if (getCell(row, i).innerText == "" || getCell(row, i).classList.contains('error')) rowComplete = false;
+    }
+    if (rowComplete) {
+        for (let i = 0; i < 9; i++) animateGlow(getCell(row, i));
+    }
+
+    let colComplete = true;
+    for (let i = 0; i < 9; i++) {
+        if (getCell(i, col).innerText == "" || getCell(i, col).classList.contains('error')) colComplete = false;
+    }
+    if (colComplete) {
+        for (let i = 0; i < 9; i++) animateGlow(getCell(i, col));
+    }
+
+    let boxComplete = true;
+    const startRow = Math.floor(row / 3) * 3;
+    const startCol = Math.floor(col / 3) * 3;
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            if (getCell(startRow + r, startCol + c).innerText == "" || getCell(startRow + r, startCol + c).classList.contains('error')) boxComplete = false;
+        }
+    }
+    if (boxComplete) {
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 3; c++) animateGlow(getCell(startRow + r, startCol + c));
+        }
+    }
+}
+
+function animateGlow(el) {
+    el.classList.add('glow-success');
+    setTimeout(() => el.classList.remove('glow-success'), 1000);
+}
+
+function checkWin() {
+    const cells = document.querySelectorAll('.cell');
+    const allCorrect = Array.from(cells).every(cell => {
+        const val = parseInt(cell.innerText);
+        const r = cell.dataset.row;
+        const c = cell.dataset.col;
+        return val === solution[r][c];
+    });
+    
+    if (allCorrect) {
+        clearInterval(timer);
+        handleWin();
+    }
+}
+
+function handleWin() {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    const timeTaken = formatTime(secondsElapsed);
+    const msg = document.createElement('div');
+    msg.className = 'win-banner';
+    msg.innerHTML = `<h2>Excellent!</h2><p>You solved it in ${timeTaken}</p>`;
+    document.body.appendChild(msg);
+
+    const currentBest = localStorage.getItem('sudokuBestTime');
+    if (!currentBest || secondsElapsed < currentBest) {
+        localStorage.setItem('sudokuBestTime', secondsElapsed);
+        bestTimeSpan.innerText = timeTaken;
+    }
+
+    setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => {
+            msg.remove();
+            resetGame(); 
+        }, 500);
+    }, 4000);
+}
+
+function handleGameOver() {
+    clearInterval(timer);
+    const msg = document.createElement('div');
+    msg.className = 'game-over-banner';
+    msg.innerHTML = `<h2>Game Over</h2><p>Too many mistakes!</p><button onclick="resetGame()">Try Again</button>`;
+    document.body.appendChild(msg);
+}
+
+
+// 5. EVENT LISTENERS AND INITIAL CALL
+
 document.addEventListener('keydown', (e) => {
-    if (isPaused) return;
-    if (e.key >= '1' && e.key <= '9') inputNumber(parseInt(e.key));
-    if (e.key === 'Backspace') clearCell();
+    if (isPaused) return; // Ignore input if paused
+    if (e.key >= '1' && e.key <= '9') {
+        inputNumber(parseInt(e.key));
+    } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        clearCell();
+    }
 });
 
-// Row/Col/Box Glow & Sudoku Logic (generateSolution/solve/isValid/createPuzzle)
-// ... Keep your existing generation logic here ...
-
+// Start the game when the script loads
 initGame();
