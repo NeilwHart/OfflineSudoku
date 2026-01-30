@@ -42,7 +42,8 @@
   </script>
 </head>
 
-<body class="d-flex justify-content-center align-items-center vh-100">
+<!-- Removed Bootstrap classes from body -->
+<body>
   <div id="game-container" class="text-center">
     <h3 style="color: blue; margin-bottom: 15px;">Neil's Offline Sudoku</h3>
 
@@ -50,7 +51,7 @@
     <div class="stats mb-2">
       <div id="timer">Time: 00:00</div>
       <div id="mistakes-count">Mistakes: 0/3</div>
-      <div id="hints-count">Hints: 0/3</div>
+      <div id="hints-count">Hints Used: 0/3</div>
     </div>
     <div class="mb-2 text-muted" style="font-size: 0.8rem;">
       Best Time: <span id="best-time">--:--</span>
@@ -79,10 +80,12 @@
     </div> 
 
     <!-- Action Controls -->
-    <div class="mt-3 d-flex justify-content-center gap-2">
-      <button id="pause-btn" class="btn btn-outline-primary btn-sm" onclick="togglePause()">⏸️ Pause</button>
-      <button id="hint-btn" class="btn btn-outline-warning btn-sm" onclick="getHint()">💡 Hint (3)</button>
-      <button id="install-btn" class="btn btn-success btn-sm" style="display:none;">Install App</button>
+    <!-- Replaced Bootstrap utility classes (d-flex, justify-content-center, gap-2) with custom 'controls' div -->
+    <div class="controls mt-3">
+      <!-- Added 'control-button' class and removed Bootstrap classes -->
+      <button id="pause-btn" class="control-button" onclick="togglePause()">⏸️ Pause</button>
+      <button id="hint-btn" class="control-button" onclick="getHint()">💡 Hint</button>
+      <button id="install-btn" class="control-button" style="display:none;">Install App</button>
     </div>
 
     <!-- Settings -->
@@ -93,7 +96,8 @@
         <option value="medium" selected>Medium</option>
         <option value="hard">Hard</option>
       </select>
-      <button id="new-game-btn" class="btn btn-outline-secondary btn-sm" onclick="resetGame()">🔄 New Game</button>
+      <!-- Added 'control-button' class and removed Bootstrap classes -->
+      <button id="new-game-btn" class="control-button" onclick="resetGame()">🔄 New Game</button>
     </div>
   </div>
 
@@ -101,6 +105,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
