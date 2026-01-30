@@ -255,4 +255,13 @@ function createPuzzle(solution) {
 
 initGame();
 
+// Handle Keyboard Input
+document.addEventListener('keydown', (e) => {
+    if (e.key >= '1' && e.key <= '9') {
+        inputNumber(parseInt(e.key));
+    } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        clearCell();
+    }
+});
+
 
