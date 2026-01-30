@@ -13,6 +13,7 @@ body {
     width: 100%; 
 }
 .cell { 
+    aspect-ratio: 1 / 1; /* Keeps cells square */
     width: 100%; 
     border: 1px solid #ccc; 
     /* Make font size much larger */
@@ -127,3 +128,4 @@ input {
 }
 
 .win-banner h2 { color: #121df1; margin-top: 0; }
+
