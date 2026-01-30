@@ -17,7 +17,7 @@ body {
     width: 100%; 
     border: 1px solid #ccc; 
     /* Make font size much larger */
-    font-size: 1.5rem; 
+    font-size: 1rem; 
     /* Use flexbox for perfect centering (removes 'padding' effect) */
     display: flex;
     justify-content: center;
@@ -128,4 +128,5 @@ input {
 }
 
 .win-banner h2 { color: #121df1; margin-top: 0; }
+
 
