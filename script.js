@@ -238,7 +238,7 @@ function createPuzzle(solution) {
         case 'easy': cluesToKeep = 35; break;
         case 'medium': cluesToKeep = 28; break; 
         case 'hard': cluesToKeep = 22; break;
-        default: cluesToKeep = 28;
+        default: cluesToKeep = 35;
     }
 
     let cellsRevealed = 81;
@@ -254,4 +254,5 @@ function createPuzzle(solution) {
 }
 
 initGame();
+
 
