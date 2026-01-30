@@ -32,7 +32,8 @@ body {
     margin-bottom: 15px;
 }
 
-.controls button {
+/* --- Shared Style for All Control Buttons --- */
+.control-button {
     padding: 5px 10px;
     border: 1px solid #121df1;
     background: white;
@@ -41,6 +42,12 @@ body {
     cursor: pointer;
     font-size: 0.8rem;
 }
+
+/* Updated selector to use the shared class */
+.controls button {
+    /* Inherits from .control-button */
+}
+
 
 /* --- THE GRID --- */
 #grid { 
@@ -135,6 +142,15 @@ body {
 
 .game-over-banner { border: 3px solid #d32f2f; }
 .game-over-banner h2 { color: #d32f2f; margin: 0; }
+
+/* Styling the button inside the game over banner */
+.game-over-banner .control-button {
+    margin-top: 20px;
+    padding: 10px 20px; /* Slightly larger button for primary action */
+    font-size: 1rem;
+    border-color: #d32f2f; /* Using the game over color for the button border */
+    color: #d32f2f;
+}
 
 @keyframes banner-appear {
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
