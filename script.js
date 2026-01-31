@@ -4,9 +4,10 @@
  * FIX: All functions declared before they are called.
  */
 
-// Load the Confetti Library (Latest Stable 1.9.4)
+// Load Confetti Library correctly
+// Load the Confetti Library (Latest 2026 Stable Version)
 const confettiScript = document.createElement('script');
-confettiScript.src = 'https://cdn.jsdelivr.net';
+confettiScript.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js';
 document.head.appendChild(confettiScript);
 
 // 1. GAME LOGIC FUNCTIONS (Declared first to avoid ReferenceError)
@@ -340,4 +341,5 @@ document.addEventListener('keydown', (e) => {
 
 // Start the game when the script loads
 initGame();
+
 
